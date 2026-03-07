@@ -341,12 +341,12 @@ function App() {
                   stroke="#000000"
                   strokeWidth={2}
                 />
-                {/* Top Penalty Arc - Fixed mapping to touch lines */}
+                {/* Top Penalty Arc - Center is Penalty Spot (11m from goal line) */}
                 <Arc
                   x={PITCH_WIDTH / 2}
-                  y={130}
-                  innerRadius={70}
-                  outerRadius={70}
+                  y={20 + (11 * (110 / 16.5))}
+                  innerRadius={9.15 * (110 / 16.5)}
+                  outerRadius={9.15 * (110 / 16.5)}
                   angle={106}
                   rotation={37}
                   stroke="#000000"
@@ -362,12 +362,12 @@ function App() {
                   stroke="#000000"
                   strokeWidth={2}
                 />
-                {/* Bottom Penalty Arc - Fixed mapping to touch lines */}
+                {/* Bottom Penalty Arc - Center is Penalty Spot */}
                 <Arc
                   x={PITCH_WIDTH / 2}
-                  y={PITCH_HEIGHT - 130}
-                  innerRadius={70}
-                  outerRadius={70}
+                  y={PITCH_HEIGHT - 20 - (11 * (110 / 16.5))}
+                  innerRadius={9.15 * (110 / 16.5)}
+                  outerRadius={9.15 * (110 / 16.5)}
                   angle={106}
                   rotation={217}
                   stroke="#000000"
