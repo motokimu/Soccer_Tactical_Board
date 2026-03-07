@@ -1,0 +1,32 @@
+:root {
+  --bg-dark: #222222;
+  --bg-darker: #1a1a1a;
+  --text-light: #ffffff;
+  --text-muted: #aaaaaa;
+  --pitch-bg: #f4f4f4;
+  --pitch-border: #000000;
+  --primary: #efefef;
+  --accent: #4ade80;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  overflow: hidden; /* Prevent scrolling, app is full screen */
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
