@@ -7,7 +7,7 @@ if (typeof window === 'undefined') {
     neonConfig.webSocketConstructor = ws
 }
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient }
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
 const getPrisma = () => {
     const url = process.env.DATABASE_URL || 'file:./prisma/dev.db'
@@ -15,7 +15,7 @@ const getPrisma = () => {
 
     if (isPostgres) {
         const pool = new Pool({ connectionString: url })
-        const adapter = new PrismaNeon(pool)
+        const adapter = new PrismaNeon(pool as any)
         return new PrismaClient({ adapter })
     }
 
