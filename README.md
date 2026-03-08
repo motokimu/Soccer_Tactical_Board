@@ -1,73 +1,60 @@
-# React + TypeScript + Vite
+# サッカー・タクティカルボード (Soccer Tactical Board)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+直感的な操作でサッカーの戦術図を作成・保存できる、Webベースのタクティカルボードアプリケーションです。
 
-Currently, two official plugins are available:
+## 🌟 主な機能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **インタラクティブなボード**: ドラッグ＆ドロップで選手やボールを配置可能。
+- **作図ツール**: 直線、矢印、フリーハンドでの描き込みに対応。
+- **高度な範囲選択**: マウスドラッグによる複数オブジェクトの一括選択と移動。
+- **ショートカットキー**: 
+  - `Ctrl/Cmd + C / V`: コピー＆ペースト
+  - `Backspace / Delete`: 削除
+  - `Ctrl/Cmd + Z / Y`: 元に戻す(Undo) / やり直し(Redo)
+- **フォーメーション・プリセット**: 4-4-2 や 4-2-3-1 をワンクリックで展開。
+- **テンプレート保存**: 作成した戦術を名前をつけてデータベースに保存し、いつでも呼び出し可能。
+- **高画質エクスポート**: 「ピッチのみ」または「ボード全体（背景込み）」を選択して画像として保存。
 
-## React Compiler
+## 🛠 技術スタック
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React, Konva (react-konva), Lucide React
+- **Backend API**: Express (Local), Vercel Serverless Functions
+- **Database**: Prisma (ORM)
+  - ローカル: SQLite
+  - 本番: Neon (PostgreSQL)
+- **Development**: Vite, TypeScript, tsx
 
-## Expanding the ESLint configuration
+## 🚀 セットアップ
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 環境変数の準備
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+`.env` ファイルを作成し、データベースURLを設定してください。
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```env
+# ローカル開発用 (デフォルト)
+DATABASE_URL="file:./dev.db"
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 本番環境 (Neonなど) 用
+# DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 開発サーバーの起動
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
+APIサーバーはポート 3001、フロントエンドはポート 5173 で起動します。
+
+## 📁 ディレクトリ構成
+
+- `/src`: フロントエンドのReactコンポーネントとUI
+- `/api`: Vercel Serverless Functions (Backend API)
+- `/server`: ローカル開発用のAPIブリッジサーバー
+- `/prisma`: データベーススキーマとマイグレーション
+- `/scripts`: データベースの準備用スクリプト
+
+## 📝 ライセンス
+
+MIT License
