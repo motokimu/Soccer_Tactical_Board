@@ -1,4 +1,4 @@
-import { prisma } from '../lib/prisma';
+import { prisma } from '../lib/prisma.ts';
 
 export default async function handler(req: any, res: any) {
     if (req.method === 'GET') {
