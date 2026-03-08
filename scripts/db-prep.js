@@ -6,7 +6,7 @@ const schemaPath = path.resolve(process.cwd(), 'prisma/schema.prisma');
 const schemaContent = fs.readFileSync(schemaPath, 'utf8');
 
 const databaseUrl = process.env.DATABASE_URL || '';
-const provider = (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://'))
+const provider = (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://') || process.env.VERCEL)
     ? 'postgresql'
     : 'sqlite';
 
