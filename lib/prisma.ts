@@ -5,7 +5,6 @@ import ws from 'ws'
 
 if (typeof window === 'undefined') {
     const wsConstructor = (ws as any).default || ws;
-    console.log('Static check - WebSocket constructor type:', typeof wsConstructor);
     neonConfig.webSocketConstructor = wsConstructor;
 }
 
@@ -22,10 +21,7 @@ const getPrisma = () => {
         }
     }
 
-    console.log('Database URL starts with:', url.substring(0, 15) + '...');
     const isPostgres = url.startsWith('postgresql://') || url.startsWith('postgres://')
-
-    console.log(`Initializing Prisma Client with ${isPostgres ? 'Neon (PostgreSQL)' : 'SQLite'}`);
 
     if (isPostgres) {
         const pool = new Pool({ connectionString: url })
