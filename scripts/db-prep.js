@@ -10,7 +10,7 @@ const provider = (databaseUrl.startsWith('postgresql://') || databaseUrl.startsW
     ? 'postgresql'
     : 'sqlite';
 
-console.log(`[db-prep] Detected provider: ${provider} (URL base: ${databaseUrl.split(':')[0]})`);
+// console.log(`[db-prep] Detected provider: ${provider} (URL base: ${databaseUrl.split(':')[0]})`);
 
 const updatedContent = schemaContent.replace(
     /provider\s*=\s*"(sqlite|postgresql)"/,
@@ -19,7 +19,5 @@ const updatedContent = schemaContent.replace(
 
 if (schemaContent !== updatedContent) {
     fs.writeFileSync(schemaPath, updatedContent);
-    console.log(`[db-prep] Updated schema.prisma provider to ${provider}`);
-} else {
-    console.log(`[db-prep] schema.prisma already using ${provider}`);
+    // console.log(`[db-prep] Updated schema.prisma provider to ${provider}`);
 }

@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
             });
             return res.status(200).json(templates);
         } catch (error: any) {
-            console.error('Fetch templates error:', error.message);
+            console.error('[API] Fetch templates error:', error.message);
             return res.status(500).json({ error: 'Failed to fetch templates' });
         }
     }
@@ -23,13 +23,10 @@ export default async function handler(req: any, res: any) {
     if (req.method === 'POST') {
         try {
             const { name, data } = req.body;
-            // Security: Basic input validation
             if (!name || typeof name !== 'string' || name.length > 50) {
                 return res.status(400).json({ error: 'Invalid name' });
             }
-            if (!data || (typeof data !== 'object' && typeof data !== 'string')) {
-                return res.status(400).json({ error: 'Invalid data' });
-            }
+            if (!data) return res.status(400).json({ error: 'Invalid data' });
 
             const dataString = typeof data === 'string' ? data : JSON.stringify(data);
             const id = crypto.randomUUID();
@@ -51,7 +48,7 @@ export default async function handler(req: any, res: any) {
             });
             return res.status(201).json(template);
         } catch (error: any) {
-            console.error('Save template error:', error.message);
+            console.error('[API] Save template error:', error.message);
             return res.status(500).json({ error: 'Failed to save template' });
         }
     }
@@ -68,7 +65,7 @@ export default async function handler(req: any, res: any) {
             }
             return res.status(204).end();
         } catch (error: any) {
-            console.error('Delete template error:', error.message);
+            console.error('[API] Delete template error:', error.message);
             return res.status(500).json({ error: 'Failed to delete template' });
         }
     }
