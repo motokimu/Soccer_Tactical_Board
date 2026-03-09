@@ -67,6 +67,8 @@ export function Editor() {
   const isDraggingRef = useRef(false);
   const pendingSaveRef = useRef(false);
   const lastCursorUpdateRef = useRef(0);
+  const lastCursorPosRef = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
+  const lastStateBroadcastRef = useRef(0);
 
   // Responsive Scale State
   const [stageScale, setStageScale] = useState(1);
@@ -271,11 +273,19 @@ export function Editor() {
       localStorage.setItem('soccerBoardLines', JSON.stringify(lines));
 
       // Broadcast state change via Ably
-      if (ablyChannelRef.current && ablyClientRef.current?.connection.state === 'connected') {
-        try {
-          ablyChannelRef.current.publish('state-change', { objects, lines });
-        } catch (e) {
-          // Ignore
+      if (ablyChannelRef.current && ablyClientRef.current?.connection.state === 'connected' && remoteUsers.length > 0) {
+        const now = Date.now();
+        // Throttle state updates: max once every 500ms if drawing/dragging, otherwise immediate
+        if (!isDrawing.current && !isDraggingRef.current) {
+          try {
+            ablyChannelRef.current.publish('state-change', { objects, lines });
+            lastStateBroadcastRef.current = now;
+          } catch (e) { /* Ignore */ }
+        } else if (now - lastStateBroadcastRef.current > 500) {
+          try {
+            ablyChannelRef.current.publish('state-change', { objects, lines });
+            lastStateBroadcastRef.current = now;
+          } catch (e) { /* Ignore */ }
         }
       }
 
@@ -302,7 +312,7 @@ export function Editor() {
       localStorage.removeItem('soccerBoardObjects');
       localStorage.removeItem('soccerBoardLines');
 
-      if (ablyChannelRef.current && ablyClientRef.current?.connection.state === 'connected') {
+      if (ablyChannelRef.current && ablyClientRef.current?.connection.state === 'connected' && remoteUsers.length > 0) {
         try {
           ablyChannelRef.current.publish('state-change', { objects, lines });
         } catch (e) {
@@ -644,14 +654,23 @@ export function Editor() {
     const pos = layer.getRelativePointerPosition();
     if (!pos) return;
 
-    // Throttle Ably cursor presence updates (max 10/sec)
+    // Throttle Ably cursor presence updates
     const now = Date.now();
-    if (ablyChannelRef.current && ablyClientRef.current?.connection.state === 'connected' && now - lastCursorUpdateRef.current > 100) {
-      lastCursorUpdateRef.current = now;
-      try {
-        ablyChannelRef.current.presence.update({ name: userName, color: userColor, x: pos.x, y: pos.y });
-      } catch (e) {
-        // Silently ignore presence update errors
+    const lastPos = lastCursorPosRef.current;
+    const dist = Math.sqrt(Math.pow(pos.x - lastPos.x, 2) + Math.pow(pos.y - lastPos.y, 2));
+
+    if (ablyChannelRef.current && ablyClientRef.current?.connection.state === 'connected' && remoteUsers.length > 0) {
+      // Update if:
+      // 1. 250ms passed AND moved > 5px
+      // 2. OR it's been a long time (e.g. 2 seconds) regardless of distance (to ensure sync eventually)
+      if ((now - lastCursorUpdateRef.current > 250 && dist > 5) || (now - lastCursorUpdateRef.current > 2000)) {
+        lastCursorUpdateRef.current = now;
+        lastCursorPosRef.current = { x: pos.x, y: pos.y };
+        try {
+          ablyChannelRef.current.presence.update({ name: userName, color: userColor, x: pos.x, y: pos.y });
+        } catch (e) {
+          // Silently ignore presence update errors
+        }
       }
     }
 
