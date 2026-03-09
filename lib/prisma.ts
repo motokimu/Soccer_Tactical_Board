@@ -4,7 +4,7 @@ import { Pool, neonConfig } from '@neondatabase/serverless'
 import ws from 'ws'
 
 if (typeof window === 'undefined') {
-    neonConfig.webSocketConstructor = ws
+    neonConfig.webSocketConstructor = (ws as any).default || ws
 }
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
