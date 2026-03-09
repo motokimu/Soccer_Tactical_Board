@@ -21,7 +21,6 @@ import {
   Arrow as KArrow
 } from 'react-konva';
 
-const ABLY_API_KEY = import.meta.env.VITE_ABLY_API_KEY || '';
 const USER_COLORS = ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#6366f1'];
 
 type ObjType = 'player-red' | 'player-blue' | 'ball' | 'text';
@@ -129,7 +128,7 @@ export function Editor() {
 
 
   useEffect(() => {
-    if (!userName || !id || !ABLY_API_KEY) return;
+    if (!userName || !id) return;
 
     let cancelled = false;
     const clientId = `user-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -137,7 +136,8 @@ export function Editor() {
     setUserColor(color);
 
     const ably = new Ably.Realtime({
-      key: ABLY_API_KEY,
+      authUrl: '/api/ably-auth',
+      authParams: { clientId },
       clientId,
     });
     ablyClientRef.current = ably;

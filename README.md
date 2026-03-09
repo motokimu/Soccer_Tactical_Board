@@ -36,7 +36,8 @@
 DATABASE_URL="file:./dev.db"
 
 # Ably APIキー (リアルタイム同期用)
-VITE_ABLY_API_KEY="your-ably-api-key"
+# ※必ずサーバー側変数として設定してください（VITE_ プレフィックスなし）
+ABLY_API_KEY="your-ably-api-key"
 
 # 本番環境 (Neonなど) 用
 # DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
