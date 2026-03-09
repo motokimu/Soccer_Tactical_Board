@@ -12,7 +12,16 @@ if (typeof window === 'undefined') {
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
 const getPrisma = () => {
-    const url = process.env.DATABASE_URL || 'file:./prisma/dev.db'
+    let url = process.env.DATABASE_URL || 'file:./prisma/dev.db'
+
+    // Sanitize Neon URL: Remove channel_binding which can cause TypeErrors in the serverless driver
+    if (url.includes('neon.tech')) {
+        url = url.replace(/[\?&]channel_binding=[^&]+/, '');
+        if (!url.includes('sslmode=')) {
+            url += (url.includes('?') ? '&' : '?') + 'sslmode=require';
+        }
+    }
+
     console.log('Database URL starts with:', url.substring(0, 15) + '...');
     const isPostgres = url.startsWith('postgresql://') || url.startsWith('postgres://')
 
