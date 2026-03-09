@@ -21,6 +21,7 @@ dist-ssr
 
 # Prisma / Databases
 .env
+.env.production
 *.db
 *.db-journal
 /prisma/*.db

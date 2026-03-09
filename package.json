@@ -7,7 +7,7 @@
     "dev": "npm run db:prepare && concurrently \"vite\" \"tsx server/index.ts\"",
     "dev:api": "tsx server/index.ts",
     "db:prepare": "node scripts/db-prep.js",
-    "build": "npm run db:prepare && prisma generate && tsc -b && vite build",
+    "build": "npm run db:prepare && prisma db push --accept-data-loss && prisma generate && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
