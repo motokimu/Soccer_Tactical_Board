@@ -32,11 +32,12 @@ export default async function handler(req: any, res: any) {
             }
 
             const dataString = typeof data === 'string' ? data : JSON.stringify(data);
+            const id = crypto.randomUUID();
 
             if (isVercel) {
                 const { rows } = await sql`
-                    INSERT INTO "Template" ("name", "data", "updatedAt")
-                    VALUES (${name}, ${dataString}, NOW())
+                    INSERT INTO "Template" ("id", "name", "data", "updatedAt")
+                    VALUES (${id}, ${name}, ${dataString}, NOW())
                     RETURNING *
                 `;
                 return res.status(201).json(rows[0]);
