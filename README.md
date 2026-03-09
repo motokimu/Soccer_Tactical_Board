@@ -19,6 +19,7 @@
 
 - **Frontend**: React, Konva (react-konva), Lucide React
 - **Backend API**: Express (Local), Vercel Serverless Functions
+- **Real-time Sync**: Ably (Realtime Pub/Sub + Presence)
 - **Database**: 
   - ローカル: Prisma + SQLite
   - 本番 (Vercel): @vercel/postgres (SQL直接実行)
@@ -28,11 +29,14 @@
 
 ### 環境変数の準備
 
-`.env` ファイルを作成し、データベースURLを設定してください。
+`.env` ファイルを作成し、データベースURLとAbly APIキーを設定してください。
 
 ```env
 # ローカル開発用 (デフォルト)
 DATABASE_URL="file:./dev.db"
+
+# Ably APIキー (リアルタイム同期用)
+VITE_ABLY_API_KEY="your-ably-api-key"
 
 # 本番環境 (Neonなど) 用
 # DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
@@ -46,11 +50,11 @@ npm run dev
 ```
 
 ローカル環境では Prisma が `dev.db` (SQLite) を自動的にセットアップします。
-APIサーバーはポート 3001、フロントエンドはポート 5173 で起動します。
+フロントエンドはポート 5173 で起動します。
 
 ### 本番環境 (Vercel) へのデプロイ
 
-1. Vercel プロジェクトに `POSTGRES_URL` (Vercel Postgres の接続文字列) を設定します。
+1. Vercel プロジェクトに `POSTGRES_URL` と `VITE_ABLY_API_KEY` を設定します。
 2. デプロイ時に `npm run build` が実行され、以下の処理が自動で行われます：
    - `db:prepare`: `DATABASE_URL` に応じて Prisma スキーマのプロバイダーを切り替え
    - `prisma db push`: スキーマをデータベースに反映
