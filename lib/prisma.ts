@@ -13,6 +13,8 @@ const getPrisma = () => {
     const url = process.env.DATABASE_URL || 'file:./prisma/dev.db'
     const isPostgres = url.startsWith('postgresql://') || url.startsWith('postgres://')
 
+    console.log(`Initializing Prisma Client with ${isPostgres ? 'Neon (PostgreSQL)' : 'SQLite'}`);
+
     if (isPostgres) {
         const pool = new Pool({ connectionString: url })
         const adapter = new PrismaNeon(pool as any)
