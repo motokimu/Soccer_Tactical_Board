@@ -19,9 +19,9 @@
 
 - **Frontend**: React, Konva (react-konva), Lucide React
 - **Backend API**: Express (Local), Vercel Serverless Functions
-- **Database**: Prisma (ORM)
-  - ローカル: SQLite
-  - 本番: Neon (PostgreSQL)
+- **Database**: 
+  - ローカル: Prisma + SQLite
+  - 本番 (Vercel): @vercel/postgres (SQL直接実行)
 - **Development**: Vite, TypeScript, tsx
 
 ## 🚀 セットアップ
@@ -45,7 +45,16 @@ npm install
 npm run dev
 ```
 
+ローカル環境では Prisma が `dev.db` (SQLite) を自動的にセットアップします。
 APIサーバーはポート 3001、フロントエンドはポート 5173 で起動します。
+
+### 本番環境 (Vercel) へのデプロイ
+
+1. Vercel プロジェクトに `POSTGRES_URL` (Vercel Postgres の接続文字列) を設定します。
+2. デプロイ時に `npm run build` が実行され、以下の処理が自動で行われます：
+   - `db:prepare`: `DATABASE_URL` に応じて Prisma スキーマのプロバイダーを切り替え
+   - `prisma db push`: スキーマをデータベースに反映
+   - `prisma generate`: Prisma Client の生成
 
 ## 📁 ディレクトリ構成
 
