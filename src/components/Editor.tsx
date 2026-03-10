@@ -836,7 +836,11 @@ export function Editor() {
               autoFocus
               value={tempUserName}
               onChange={(e) => setTempUserName(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleUserModalSubmit()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                  handleUserModalSubmit();
+                }
+              }}
               placeholder="Your Name"
             />
             <div className="modal-actions">
@@ -882,7 +886,11 @@ export function Editor() {
               autoFocus
               value={textInputValue}
               onChange={(e) => setTextInputValue(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleModalSubmit()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                  handleModalSubmit();
+                }
+              }}
               placeholder="Enter text here..."
             />
             <div className="modal-actions">
