@@ -620,18 +620,18 @@
 .boards-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .board-card {
   background: white;
   border: 1px solid #eee;
-  padding: 6px 16px;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   transition: box-shadow 0.2s;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .board-card:hover {
@@ -641,7 +641,7 @@
 .board-card-info {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
 .board-card-meta {
@@ -705,7 +705,6 @@
 .board-actions-menu {
   display: flex;
   gap: 8px;
-  margin-bottom: 8px;
 }
 
 .icon-btn-small {
