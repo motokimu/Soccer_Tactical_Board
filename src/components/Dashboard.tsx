@@ -29,6 +29,7 @@ export function Dashboard() {
     const [showUserModal, setShowUserModal] = useState(false);
     const [tempUserName, setTempUserName] = useState('');
     const [pendingNavigate, setPendingNavigate] = useState<string | null>(null);
+    const [visibleCount, setVisibleCount] = useState(5);
 
     const navigate = useNavigate();
 
@@ -233,30 +234,42 @@ export function Dashboard() {
                         <p>ボードが見つかりません。新しいボードを作成しましょう！</p>
                     </div>
                 ) : (
-                    filteredBoards.map(board => (
-                        <div key={board.id} className="board-card">
-                            <div className="board-card-info">
-                                <div className="board-card-meta">
-                                    <span>作成日時 {formatDate(board.createdAt)}</span>
-                                    <span>更新日時 {formatDate(board.updatedAt)}</span>
+                    <>
+                        {filteredBoards.slice(0, visibleCount).map(board => (
+                            <div key={board.id} className="board-card">
+                                <div className="board-card-info">
+                                    <div className="board-card-meta">
+                                        <span>作成日時 {formatDate(board.createdAt)}</span>
+                                        <span>更新日時 {formatDate(board.updatedAt)}</span>
+                                    </div>
+                                    <h3 className="board-card-name">{board.name}</h3>
                                 </div>
-                                <h3 className="board-card-name">{board.name}</h3>
-                            </div>
-                            <div className="board-card-actions">
-                                <div className="board-actions-menu">
-                                    <button className="icon-btn-small" onClick={() => handleEditBoard(board.id)} title="編集">
-                                        <Pen size={18} />
-                                    </button>
-                                    <button className="icon-btn-small" onClick={() => handleDuplicateBoard(board)} title="複製">
-                                        <Copy size={18} />
-                                    </button>
-                                    <button className="icon-btn-small" onClick={() => handleDeleteBoard(board.id)} title="削除">
-                                        <Trash size={18} />
-                                    </button>
+                                <div className="board-card-actions">
+                                    <div className="board-actions-menu">
+                                        <button className="icon-btn-small" onClick={() => handleEditBoard(board.id)} title="編集">
+                                            <Pen size={18} />
+                                        </button>
+                                        <button className="icon-btn-small" onClick={() => handleDuplicateBoard(board)} title="複製">
+                                            <Copy size={18} />
+                                        </button>
+                                        <button className="icon-btn-small" onClick={() => handleDeleteBoard(board.id)} title="削除">
+                                            <Trash size={18} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        ))}
+                        {filteredBoards.length > visibleCount && (
+                            <div className="show-more-container">
+                                <button
+                                    className="show-more-btn"
+                                    onClick={() => setVisibleCount(prev => prev + 5)}
+                                >
+                                    Show more...
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </main>
 
