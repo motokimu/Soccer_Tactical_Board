@@ -270,7 +270,6 @@ export function Dashboard() {
                             autoFocus
                             value={tempUserName}
                             onChange={(e) => setTempUserName(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleUserModalSubmit()}
                             placeholder="Your Name"
                         />
                         <div className="modal-actions">

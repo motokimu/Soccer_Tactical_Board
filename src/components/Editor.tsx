@@ -857,15 +857,6 @@ export function Editor() {
               autoFocus
               value={tempUserName}
               onChange={(e) => setTempUserName(e.target.value)}
-              onCompositionStart={() => { isComposingRef.current = true; }}
-              onCompositionEnd={() => {
-                setTimeout(() => { isComposingRef.current = false; }, 50);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !isComposingRef.current && e.keyCode !== 229) {
-                  handleUserModalSubmit();
-                }
-              }}
               placeholder="Your Name"
             />
             <div className="modal-actions">
@@ -911,15 +902,6 @@ export function Editor() {
               autoFocus
               value={textInputValue}
               onChange={(e) => setTextInputValue(e.target.value)}
-              onCompositionStart={() => { isComposingRef.current = true; }}
-              onCompositionEnd={() => {
-                setTimeout(() => { isComposingRef.current = false; }, 50);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !isComposingRef.current && e.keyCode !== 229) {
-                  handleModalSubmit();
-                }
-              }}
               placeholder="Enter text here..."
             />
             <div className="modal-actions">
@@ -982,16 +964,21 @@ export function Editor() {
                   }}
                 />
               ) : (
-                <span
-                  style={{ fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer' }}
+                <div
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
                   onClick={() => {
                     setEditingTitleValue(boardName);
                     setIsEditingTitle(true);
                   }}
-                  title="Click to edit board title"
                 >
-                  {boardName}
-                </span>
+                  <span
+                    style={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                    title="Click to edit board title"
+                  >
+                    {boardName}
+                  </span>
+                  <Pen size={14} style={{ opacity: 0.6 }} />
+                </div>
               )}
             </div>
             <div style={{
