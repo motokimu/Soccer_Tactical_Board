@@ -69,6 +69,9 @@ export function Editor() {
   const lastCursorUpdateRef = useRef(0);
   const lastCursorPosRef = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
   const lastStateBroadcastRef = useRef(0);
+  const isComposingRef = useRef(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editingTitleValue, setEditingTitleValue] = useState('');
 
   // Responsive Scale State
   const [stageScale, setStageScale] = useState(1);
@@ -259,6 +262,24 @@ export function Editor() {
         console.error('Auto-save failed:', e);
       }
     }, 500);
+  };
+
+  const handleSaveTitle = async (newName: string) => {
+    if (!id) return;
+    try {
+      const response = await fetch(`/api/boards?id=${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName }),
+      });
+      if (response.ok) {
+        setBoardName(newName);
+      } else {
+        console.error('Failed to save title');
+      }
+    } catch (err) {
+      console.error('Error saving title:', err);
+    }
   };
 
   useEffect(() => {
@@ -836,8 +857,12 @@ export function Editor() {
               autoFocus
               value={tempUserName}
               onChange={(e) => setTempUserName(e.target.value)}
+              onCompositionStart={() => { isComposingRef.current = true; }}
+              onCompositionEnd={() => {
+                setTimeout(() => { isComposingRef.current = false; }, 50);
+              }}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                if (e.key === 'Enter' && !isComposingRef.current && e.keyCode !== 229) {
                   handleUserModalSubmit();
                 }
               }}
@@ -886,8 +911,12 @@ export function Editor() {
               autoFocus
               value={textInputValue}
               onChange={(e) => setTextInputValue(e.target.value)}
+              onCompositionStart={() => { isComposingRef.current = true; }}
+              onCompositionEnd={() => {
+                setTimeout(() => { isComposingRef.current = false; }, 50);
+              }}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                if (e.key === 'Enter' && !isComposingRef.current && e.keyCode !== 229) {
                   handleModalSubmit();
                 }
               }}
@@ -925,7 +954,45 @@ export function Editor() {
             </Link>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>Soccer Tactical Board</span>
-              <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{boardName}</span>
+              {isEditingTitle ? (
+                <input
+                  type="text"
+                  autoFocus
+                  className="title-edit-input"
+                  value={editingTitleValue}
+                  onChange={(e) => setEditingTitleValue(e.target.value)}
+                  onBlur={() => {
+                    setIsEditingTitle(false);
+                    if (editingTitleValue.trim() && editingTitleValue !== boardName) {
+                      handleSaveTitle(editingTitleValue.trim());
+                    }
+                  }}
+                  onCompositionStart={() => { isComposingRef.current = true; }}
+                  onCompositionEnd={() => {
+                    setTimeout(() => { isComposingRef.current = false; }, 50);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !isComposingRef.current) {
+                      e.currentTarget.blur();
+                    }
+                    if (e.key === 'Escape') {
+                      setIsEditingTitle(false);
+                      setEditingTitleValue(boardName);
+                    }
+                  }}
+                />
+              ) : (
+                <span
+                  style={{ fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer' }}
+                  onClick={() => {
+                    setEditingTitleValue(boardName);
+                    setIsEditingTitle(true);
+                  }}
+                  title="Click to edit board title"
+                >
+                  {boardName}
+                </span>
+              )}
             </div>
             <div style={{
               width: '12px',

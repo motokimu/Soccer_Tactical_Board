@@ -107,7 +107,7 @@ export default async function handler(req: any, res: any) {
                         const params: any[] = [];
                         let paramIndex = 1;
                         if (name) { query += `, "name" = $${paramIndex++}`; params.push(name); }
-                        if (data) { query += `, "data" = $${paramIndex++}`; params.push(dataString); }
+                        if (data !== undefined) { query += `, "data" = $${paramIndex++}`; params.push(dataString); }
                         query += ` WHERE "id" = $${paramIndex} RETURNING "id", "name", "data", "createdAt", "updatedAt"`;
                         params.push(id);
                         const { rows } = await sql.query(query, params);
@@ -118,12 +118,31 @@ export default async function handler(req: any, res: any) {
                         where: { id: id as string },
                         data: {
                             ...(name && { name }),
-                            ...(data && { data: dataString })
+                            ...(data !== undefined && { data: dataString })
                         },
                         select: boardSelect
                     });
                     return res.status(200).json(board);
                 }
+            } else if (req.method === 'PUT' && name !== undefined) {
+                // Handle Name-only update for PUT
+                if (!id) return res.status(400).json({ error: 'Missing board ID' });
+                if (isVercel) {
+                    const { rows } = await sql`
+                        UPDATE "Board" 
+                        SET "name" = ${name}, "updatedAt" = NOW() 
+                        WHERE "id" = ${id as string} 
+                        RETURNING "id", "name", "data", "createdAt", "updatedAt"
+                    `;
+                    if (rows.length === 0) return res.status(404).json({ error: 'Board not found' });
+                    return res.status(200).json(rows[0]);
+                }
+                const board = await prisma.board.update({
+                    where: { id: id as string },
+                    data: { name, updatedAt: new Date() },
+                    select: boardSelect
+                });
+                return res.status(200).json(board);
             }
         } catch (error: any) {
             console.error(`[API] ${req.method} error:`, error.message);
