@@ -712,8 +712,7 @@
   border: none;
   color: #999;
   cursor: pointer;
-  padding: 8px;
-  /* Slightly increased from 6px */
+  padding: 6px;
   border-radius: 4px;
   transition: background-color 0.2s, color 0.2s;
   display: flex;
