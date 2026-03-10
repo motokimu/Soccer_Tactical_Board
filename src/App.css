@@ -753,17 +753,15 @@
 }
 
 .show-more-btn {
-  background-color: #ff00ff;
-  /* Bright Pink */
-  border: 2px solid #000;
-  color: #000;
-  padding: 12px 32px;
+  background-color: white;
+  border: 1px solid #ddd;
+  color: #666;
+  padding: 10px 24px;
   border-radius: 8px;
-  font-weight: 800;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  margin-bottom: 50px;
-  /* Space at bottom */
+  margin-bottom: 40px;
 }
 
 .show-more-btn:hover {
