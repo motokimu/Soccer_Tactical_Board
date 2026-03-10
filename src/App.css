@@ -434,7 +434,7 @@
   height: 100vh;
   overflow-y: auto;
   background-color: #f8f9fa;
-  padding: 40px;
+  padding: 12px 24px;
   color: #333;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   box-sizing: border-box;
@@ -444,7 +444,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 40px;
+  margin-bottom: 8px;
 }
 
 .header-right-actions {
@@ -508,7 +508,7 @@
 }
 
 .logo-text {
-  font-size: 2rem;
+  font-size: 1.1rem;
   color: #e91e63;
   margin: 0;
   font-weight: 800;
@@ -530,8 +530,8 @@
 }
 
 .create-icon {
-  width: 64px;
-  height: 64px;
+  width: 32px;
+  height: 32px;
   background-color: #e91e63;
   border-radius: 50%;
   display: flex;
@@ -550,8 +550,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  gap: 20px;
+  margin-bottom: 8px;
+  gap: 16px;
 }
 
 .search-box {
@@ -620,17 +620,18 @@
 .boards-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
 }
 
 .board-card {
   background: white;
   border: 1px solid #eee;
-  padding: 24px;
+  padding: 6px 16px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   transition: box-shadow 0.2s;
+  border-radius: 6px;
 }
 
 .board-card:hover {
@@ -651,9 +652,9 @@
 }
 
 .board-card-name {
-  font-size: 1.5rem;
+  font-size: 0.95rem;
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
   color: #444;
 }
 
@@ -749,7 +750,7 @@
 .show-more-container {
   display: flex;
   justify-content: center;
-  padding: 24px 0;
+  padding: 4px 0;
 }
 
 .show-more-btn {
