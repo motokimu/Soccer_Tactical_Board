@@ -247,13 +247,13 @@ export function Dashboard() {
                                 <div className="board-card-actions">
                                     <div className="board-actions-menu">
                                         <button className="icon-btn-small" onClick={() => handleEditBoard(board.id)} title="編集">
-                                            <Pen size={18} />
+                                            <Pen size={28} />
                                         </button>
                                         <button className="icon-btn-small" onClick={() => handleDuplicateBoard(board)} title="複製">
-                                            <Copy size={18} />
+                                            <Copy size={28} />
                                         </button>
                                         <button className="icon-btn-small" onClick={() => handleDeleteBoard(board.id)} title="削除">
-                                            <Trash size={18} />
+                                            <Trash size={28} />
                                         </button>
                                     </div>
                                 </div>
