@@ -180,6 +180,7 @@ export function Dashboard() {
             <header className="dashboard-header">
                 <div className="logo-section">
                     <h1 className="logo-text">Soccer Tactical Board</h1>
+                    <span style={{ fontSize: '0.8rem', color: '#999' }}>Total: {boards.length} boards</span>
                 </div>
                 <div className="header-right-actions">
                     {userName && (

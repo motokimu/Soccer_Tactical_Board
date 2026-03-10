@@ -431,11 +431,13 @@
 
 /* Dashboard Styles */
 .dashboard-container {
-  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
   background-color: #f8f9fa;
   padding: 40px;
   color: #333;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  box-sizing: border-box;
 }
 
 .dashboard-header {
@@ -729,6 +731,7 @@
   padding: 80px;
   color: #999;
 }
+
 .title-edit-input {
   background: transparent;
   border: none;
@@ -750,14 +753,17 @@
 }
 
 .show-more-btn {
-  background-color: white;
-  border: 1px solid #ddd;
-  color: #666;
-  padding: 10px 24px;
+  background-color: #ff00ff;
+  /* Bright Pink */
+  border: 2px solid #000;
+  color: #000;
+  padding: 12px 32px;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s;
+  margin-bottom: 50px;
+  /* Space at bottom */
 }
 
 .show-more-btn:hover {
