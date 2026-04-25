@@ -581,6 +581,7 @@ export function Editor() {
     }
     activeDraggingIds.current = [];
     isDraggingRef.current = false;
+    setSelectedIds([]);
 
     // Execute deferred auto-save after drag ends
     if (pendingSaveRef.current) {
