@@ -1,4 +1,4 @@
-# Soccer Summary Constitution
+# Constitution
 
 ## Core Principles
 
