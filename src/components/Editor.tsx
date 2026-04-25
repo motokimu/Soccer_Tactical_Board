@@ -7,7 +7,7 @@ import {
   MousePointer2, Pen, Type,
   User,
   ArrowLeft, ArrowRight, LayoutGrid,
-  ChevronLeft
+  ChevronLeft, Minus, Plus
 } from 'lucide-react';
 import {
   Stage as KStage,
@@ -74,7 +74,11 @@ export function Editor() {
   const [editingTitleValue, setEditingTitleValue] = useState('');
 
   // Responsive Scale State
-  const [stageScale, setStageScale] = useState(1);
+  const [autoFitScale, setAutoFitScale] = useState(1);
+  const [manualZoomPercent, setManualZoomPercent] = useState<number | null>(null);
+  const stageScale = manualZoomPercent !== null ? manualZoomPercent / 100 : autoFitScale;
+  const [zoomInputValue, setZoomInputValue] = useState('100');
+  const [isEditingZoom, setIsEditingZoom] = useState(false);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -353,7 +357,7 @@ export function Editor() {
         const containerHeight = clientHeight - 48;
         const scaleW = containerWidth / PITCH_WIDTH;
         const scaleH = containerHeight / PITCH_HEIGHT;
-        setStageScale(Math.min(scaleW, scaleH, 1)); // Don't scale up beyond 1
+        setAutoFitScale(Math.min(scaleW, scaleH, 1));
       }
     };
 
@@ -361,6 +365,30 @@ export function Editor() {
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!isEditingZoom) {
+      setZoomInputValue(String(Math.round(stageScale * 100)));
+    }
+  }, [stageScale, isEditingZoom]);
+
+  const handleZoomIn = () => {
+    const current = Math.round(stageScale * 100);
+    setManualZoomPercent(Math.min(200, current + 10));
+  };
+  const handleZoomOut = () => {
+    const current = Math.round(stageScale * 100);
+    setManualZoomPercent(Math.max(10, current - 10));
+  };
+  const applyZoomFromInput = () => {
+    const num = parseInt(zoomInputValue, 10);
+    if (!isNaN(num)) {
+      setManualZoomPercent(Math.min(200, Math.max(10, num)));
+    } else {
+      setZoomInputValue(String(Math.round(stageScale * 100)));
+    }
+    setIsEditingZoom(false);
+  };
 
   const stateRef = useRef({ objects, lines, selectedIds, clipboard });
   useEffect(() => {
@@ -997,6 +1025,25 @@ export function Editor() {
             <button className="icon-btn" title="Redo" onClick={redoAction} disabled={future.length === 0}><ArrowRight size={20} /></button>
             <button className="icon-btn" title="Clear Board" onClick={() => setShowConfirmModal(true)}><Trash2 size={20} /></button>
             <button className="icon-btn" title="Export Image" onClick={() => setShowExportModal(true)}><Download size={20} /></button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', borderLeft: '1px solid rgba(255,255,255,0.2)', paddingLeft: '10px', marginLeft: '4px' }}>
+              <button className="icon-btn" title="Zoom Out" onClick={handleZoomOut}><Minus size={16} /></button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                <input
+                  type="text"
+                  value={zoomInputValue}
+                  style={{ width: '40px', textAlign: 'center', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '4px', color: 'white', fontSize: '0.85rem', padding: '2px 4px' }}
+                  onClick={(e) => { setIsEditingZoom(true); e.currentTarget.select(); }}
+                  onChange={(e) => setZoomInputValue(e.target.value.replace(/[^0-9]/g, ''))}
+                  onBlur={applyZoomFromInput}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') { applyZoomFromInput(); e.currentTarget.blur(); }
+                    if (e.key === 'Escape') { setZoomInputValue(String(Math.round(stageScale * 100))); setIsEditingZoom(false); e.currentTarget.blur(); }
+                  }}
+                />
+                <span style={{ color: 'white', fontSize: '0.85rem', opacity: 0.8 }}>%</span>
+              </div>
+              <button className="icon-btn" title="Zoom In" onClick={handleZoomIn}><Plus size={16} /></button>
+            </div>
           </div>
         </div>
       </header>
